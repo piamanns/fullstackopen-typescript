@@ -1,3 +1,29 @@
+import { isInRange } from "./utils";
+
+interface BmiValues {
+    height: number;
+    width: number;
+}
+
+const validateBmiArgs = (args: string[]): BmiValues => {
+    if (args.length != 4) {
+        throw new Error('There should be two arguments, height and width.');
+    }
+    if (isNaN(Number(args[2])) || isNaN(Number(args[3]))) {
+        throw new Error('Height and width values must be numbers.')
+    }
+    if (
+        !isInRange(Number(args[2]), 1, 1000)
+        || !isInRange(Number(args[3]), 1, 1000)
+    ) {
+        throw new Error('Height and weight values must be in the range 1–1000');
+    }
+
+    return {
+        height: Number(args[2]),
+        width: Number(args[3])
+    }
+}
 
 const getBmiCategory = (bmi: number): string => {
     if (bmi < 16.0) {
@@ -20,8 +46,17 @@ const getBmiCategory = (bmi: number): string => {
 }
 
 const calculateBmi = (height: number, weight: number): string => {
-    let bmi = weight / ((height/100) ** 2);
+    const bmi = weight / ((height/100) ** 2);
     return getBmiCategory(bmi);
 }
 
-console.log(calculateBmi(180, 74));
+try {
+    const { height, width } = validateBmiArgs(process.argv);
+    console.log(calculateBmi(height, width));
+} catch (error: unknown) {
+    let errorMessage = 'Something went wrong.';
+    if (error instanceof Error) {
+        errorMessage += ' Error: ' + error.message;
+    }
+    console.log(errorMessage);
+}

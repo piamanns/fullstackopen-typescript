@@ -1,3 +1,10 @@
+import { isInRange } from "./utils";
+
+interface ExerciseValues {
+    target: number;
+    exerciseHours: number[];
+}
+
 interface Result {
     periodLength: number,
     trainingDays: number,
@@ -6,6 +13,30 @@ interface Result {
     ratingDescription: string,
     target: number,
     average: number
+}
+
+const validateExerciseArgs = (args: string[]): ExerciseValues => {
+    if (!isInRange(args.length, 4, 368)) {
+        throw new Error('Invalid amount of arguments. Enter a target, followed by training hours for 1-365 days.');
+    }
+
+    const enteredArgs = args.slice(2);
+    let validArgs: number[] = [];
+
+    enteredArgs.forEach((arg) => {
+        if (isNaN(Number(arg))) {
+            throw new Error('Only numbers are allowed as arguments.');
+        }
+        if (!isInRange(Number(arg), 0, 24)) {
+            throw new Error('Argument values outside allowed range (0-24).');
+        }
+        validArgs.push(Number(arg));
+    })
+
+    return {
+        target: validArgs[0],
+        exerciseHours: validArgs.slice(1)
+    }
 }
 
 const getRating = (avgHours: number, target: number): number => {
@@ -21,7 +52,7 @@ const getRating = (avgHours: number, target: number): number => {
 
 const getRatingDescription = (rating: number): string => {
     const ratings = [
-        "Not your week, ey?",
+        "Not really putting in the hours, ey?",
         "You did OK",
         "Excellent work!"
     ]
@@ -29,8 +60,7 @@ const getRatingDescription = (rating: number): string => {
     return ratings[rating-1];
 }
 
-
-const calculateExercises = (exerciseHours: number[], target: number): Result => {
+const calculateExercises = (target: number, exerciseHours: number[]) : Result => {
     const tDays = exerciseHours.filter(hours => hours > 0).length
     const avgHours = exerciseHours.reduce((a,b) => a + b, 0) / exerciseHours.length
     const rating = getRating(avgHours, target)
@@ -46,4 +76,14 @@ const calculateExercises = (exerciseHours: number[], target: number): Result => 
     }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+    const { target, exerciseHours } = validateExerciseArgs(process.argv);
+    console.log(calculateExercises(target, exerciseHours));
+
+} catch (error: unknown) {
+    let errorMessage = 'Something went wrong.';
+    if (error instanceof Error) {
+        errorMessage += ' Error: ' + error.message;
+    }
+    console.log(errorMessage);
+}
