@@ -5,23 +5,25 @@ interface BmiValues {
     width: number;
 }
 
-const validateBmiArgs = (args: string[]): BmiValues => {
-    if (args.length != 4) {
+export const validateBmiArgs = (args: string[], expectedArgsCount: number): BmiValues => {
+    if (args.length != expectedArgsCount) {
         throw new Error('There should be two arguments, height and width.');
     }
-    if (isNaN(Number(args[2])) || isNaN(Number(args[3]))) {
+    const [height, ...width] = args.splice(-2);
+
+    if (isNaN(Number(height)) || isNaN(Number(width))) {
         throw new Error('Height and width values must be numbers.')
     }
     if (
-        !isInRange(Number(args[2]), 1, 1000)
-        || !isInRange(Number(args[3]), 1, 1000)
+        !isInRange(Number(height), 1, 1000)
+        || !isInRange(Number(width), 1, 1000)
     ) {
         throw new Error('Height and weight values must be in the range 1–1000');
     }
 
     return {
-        height: Number(args[2]),
-        width: Number(args[3])
+        height: Number(height),
+        width: Number(width)
     }
 }
 
@@ -45,18 +47,20 @@ const getBmiCategory = (bmi: number): string => {
     }
 }
 
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
     const bmi = weight / ((height/100) ** 2);
     return getBmiCategory(bmi);
 }
 
-try {
-    const { height, width } = validateBmiArgs(process.argv);
-    console.log(calculateBmi(height, width));
-} catch (error: unknown) {
-    let errorMessage = 'Something went wrong.';
-    if (error instanceof Error) {
-        errorMessage += ' Error: ' + error.message;
+if (require.main === module) {
+    try {
+        const { height, width } = validateBmiArgs(process.argv, 4);
+        console.log(calculateBmi(height, width));
+    } catch (error: unknown) {
+        let errorMessage = 'Something went wrong.';
+        if (error instanceof Error) {
+            errorMessage += ' Error: ' + error.message;
+        }
+        console.log(errorMessage);
     }
-    console.log(errorMessage);
 }
