@@ -12,7 +12,7 @@ export const validateBmiArgs = (args: string[], expectedArgsCount: number): BmiV
     const [height, ...width] = args.splice(-2);
 
     if (isNaN(Number(height)) || isNaN(Number(width))) {
-        throw new Error('Height and width values must be numbers.')
+        throw new Error('Height and width values must be numbers.');
     }
     if (
         !isInRange(Number(height), 1, 1000)
@@ -24,8 +24,8 @@ export const validateBmiArgs = (args: string[], expectedArgsCount: number): BmiV
     return {
         height: Number(height),
         width: Number(width)
-    }
-}
+    };
+};
 
 const getBmiCategory = (bmi: number): string => {
     if (bmi < 16.0) {
@@ -45,12 +45,12 @@ const getBmiCategory = (bmi: number): string => {
     } else {
         return "Obese (Class III)";
     }
-}
+};
 
 export const calculateBmi = (height: number, weight: number): string => {
     const bmi = weight / ((height/100) ** 2);
     return getBmiCategory(bmi);
-}
+};
 
 if (require.main === module) {
     try {

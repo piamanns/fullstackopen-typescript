@@ -11,9 +11,9 @@ app.get('/bmi', (req, res) => {
         const params: string[] = [];
         Object.values(req.query).forEach(param => {
             params.push(param as string);
-        })
+        });
         const { height, width } = validateBmiArgs(params, 2);
-        const bmi = calculateBmi(height, width)
+        const bmi = calculateBmi(height, width);
         res.json({
             width: width,
             height: height,

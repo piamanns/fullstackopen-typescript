@@ -21,7 +21,7 @@ const validateExerciseArgs = (args: string[]): ExerciseValues => {
     }
 
     const enteredArgs = args.slice(2);
-    let validArgs: number[] = [];
+    const validArgs: number[] = [];
 
     enteredArgs.forEach((arg) => {
         if (isNaN(Number(arg))) {
@@ -31,39 +31,39 @@ const validateExerciseArgs = (args: string[]): ExerciseValues => {
             throw new Error('Argument values outside allowed range (0-24).');
         }
         validArgs.push(Number(arg));
-    })
+    });
 
     return {
         target: validArgs[0],
         exerciseHours: validArgs.slice(1)
-    }
-}
+    };
+};
 
 const getRating = (avgHours: number, target: number): number => {
     const successRatio = avgHours / target;
     if (successRatio < 0.5) {
-        return 1
+        return 1;
     } else if (successRatio < 1) {
-        return 2
+        return 2;
     } else {
-        return 3
+        return 3;
     }
-}
+};
 
 const getRatingDescription = (rating: number): string => {
     const ratings = [
         "Not really putting in the hours, ey?",
         "You did OK",
         "Excellent work!"
-    ]
+    ];
 
     return ratings[rating-1];
-}
+};
 
 const calculateExercises = (target: number, exerciseHours: number[]) : Result => {
-    const tDays = exerciseHours.filter(hours => hours > 0).length
-    const avgHours = exerciseHours.reduce((a,b) => a + b, 0) / exerciseHours.length
-    const rating = getRating(avgHours, target)
+    const tDays = exerciseHours.filter(hours => hours > 0).length;
+    const avgHours = exerciseHours.reduce((a,b) => a + b, 0) / exerciseHours.length;
+    const rating = getRating(avgHours, target);
 
     return {
         periodLength: exerciseHours.length,
@@ -73,8 +73,8 @@ const calculateExercises = (target: number, exerciseHours: number[]) : Result =>
         ratingDescription: getRatingDescription(rating),
         target: target,
         average: avgHours
-    }
-}
+    };
+};
 
 try {
     const { target, exerciseHours } = validateExerciseArgs(process.argv);
