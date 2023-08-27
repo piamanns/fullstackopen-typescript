@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const patientsData = [
+const utils_1 = __importDefault(require("../src/utils"));
+const origData = [
     {
         "id": "d2773336-f723-11e9-8f0b-362b9e155667",
         "name": "John McClane",
@@ -13,7 +17,7 @@ const patientsData = [
         "id": "d2773598-f723-11e9-8f0b-362b9e155667",
         "name": "Martin Riggs",
         "dateOfBirth": "1979-01-30",
-        "ssn": "300179-77A",
+        "ssn": "300179-777A",
         "gender": "male",
         "occupation": "Cop"
     },
@@ -42,4 +46,9 @@ const patientsData = [
         "occupation": "Digital evangelist"
     }
 ];
+const patientsData = origData.map(obj => {
+    const patient = (0, utils_1.default)(obj);
+    patient.id = obj.id;
+    return patient;
+});
 exports.default = patientsData;
