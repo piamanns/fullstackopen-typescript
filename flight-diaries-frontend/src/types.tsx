@@ -8,4 +8,4 @@
 
   export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
 
-  export type AddEntryFunction = (entry: NewDiaryEntry) => void;
+  export type AddEntryFn = (entry: NewDiaryEntry) => void;

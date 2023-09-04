@@ -1,5 +1,6 @@
+import axios from 'axios';
 import { useState, useEffect } from "react";
-import { DiaryEntry, NewDiaryEntry, AddEntryFunction } from "./types";
+import { DiaryEntry, NewDiaryEntry, AddEntryFn } from "./types";
 import { getAllEntries, addNewEntry } from './services/diaryService';
 
 const Entry = ({ entry }: { entry: DiaryEntry }) => {
@@ -15,7 +16,7 @@ const Entry = ({ entry }: { entry: DiaryEntry }) => {
   );
 };
 
-const EntryForm = ( { createEntry }: {createEntry: AddEntryFunction}) => {
+const EntryForm = ( { createEntry }: {createEntry: AddEntryFn}) => {
   const [newDate, setNewDate] = useState('');
   const [newWeather, setNewWeather] = useState('');
   const [newVisibility, setNewVisibility] = useState('');
@@ -71,8 +72,25 @@ const EntryForm = ( { createEntry }: {createEntry: AddEntryFunction}) => {
   );
 };
 
+const Notification = ({ message }: { message: string | null }) => {
+  if (message === null) {
+    return null;
+  }
+
+  const errorStyle = {
+    color: 'red'
+  };
+
+  return (
+    <div style={errorStyle}>
+      <p>{message}</p>
+    </div>
+  );
+};
+
 const App = () => {
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>('');
 
   useEffect(() => {
     getAllEntries().then(response => {
@@ -81,14 +99,26 @@ const App = () => {
   }, []);
 
   const addDiaryEntry = (entry: NewDiaryEntry) => {
-    addNewEntry(entry).then(data => {
-      setEntries(entries.concat(data));
-    });
+    addNewEntry(entry)
+      .then(data => {
+        setEntries(entries.concat(data));
+      })
+      .catch((error: unknown) => {
+        if (axios.isAxiosError(error) && error.response) {
+          setErrorMessage(error.response.data);
+        } else {
+          setErrorMessage('Error: Something went wrong');
+        }
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
+      });
   };
 
   return (
     <div>
       <h3>Add new entry</h3>
+      <Notification message = {errorMessage} />
       <EntryForm createEntry={addDiaryEntry} />
       <h3>Diary Entries</h3>
         {entries.map(entry =>
