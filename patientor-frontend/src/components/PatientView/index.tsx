@@ -2,7 +2,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
-import { Patient } from "../types";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import PatientEntry from "./PatientEntry";
+import { Patient } from "../../types";
 
 interface Props {
   patient: Patient | null;
@@ -39,6 +42,16 @@ const PatientView = ({ patient } : Props) => {
         <Typography variant="body1">
           ssn: {patient.ssn}<br />
           occupation: {patient.occupation}
+        </Typography>
+        <Typography variant="h6" mt={3}>
+          Entries:
+        </Typography>
+        <Typography variant="body1">
+          <List>
+            {patient.entries && patient.entries.map((entry) => (
+              <ListItem key={entry.id} disableGutters><PatientEntry entry={entry} /></ListItem>
+            ))}
+          </List>
         </Typography>
       </Box>
     );
