@@ -4,8 +4,9 @@ import { Route, Link, Routes, useMatch } from "react-router-dom";
 import { Button, Divider, Container, Typography } from '@mui/material';
 
 import { apiBaseUrl } from "./constants";
-import { Patient } from "./types";
+import { Diagnosis, Patient } from "./types";
 
+import diagnosisService from "./services/diagnoses";
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
 import PatientView from "./components/PatientView";
@@ -13,6 +14,7 @@ import PatientView from "./components/PatientView";
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
   const match = useMatch("/patients/:id");
 
   useEffect(() => {
@@ -39,6 +41,14 @@ const App = () => {
     }
   }, [match]);
 
+  useEffect(() => {
+    const getDiagnosesData = async () => {
+      const diagnoses = await diagnosisService.getAll();
+      setDiagnoses(diagnoses);
+    };
+    void getDiagnosesData();
+  }, []);
+
   return (
     <div className="App">
       <Container>
@@ -50,7 +60,7 @@ const App = () => {
         </Button>
         <Divider hidden />
         <Routes>
-          <Route path="/patients/:id" element={<PatientView patient={patient}/>} />
+          <Route path="/patients/:id" element={<PatientView patient={patient} diagnosesData={diagnoses}/>} />
           <Route path="/" element={<PatientListPage patients={patients} setPatients={setPatients} />} />
         </Routes>
       </Container>

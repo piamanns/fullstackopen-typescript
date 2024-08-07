@@ -1,19 +1,30 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import { Entry } from "../../types";
+import { Diagnosis, Entry } from "../../types";
 
 interface Props {
-  entry: Entry
+  entry: Entry;
+  diagnosesData: Diagnosis[];
 }
 
-const PatientEntry = ({ entry }: Props) => {
+const PatientEntry = ({ entry, diagnosesData }: Props) => {
+  const parsedDiagnosisCodes : Diagnosis[] = [];
+  if (entry.diagnosisCodes) {
+    entry.diagnosisCodes.forEach((code) => {
+      const parsedCode = diagnosesData.find((diagnosis => diagnosis.code === code));
+      if (parsedCode) {
+        parsedDiagnosisCodes.push(parsedCode);
+      }
+    });
+  }
+
   return (
     <Box>
     <Typography variant="body1">{entry.date} <i>{entry.description}</i></Typography>
     <ul>
-      {entry.diagnosisCodes && entry.diagnosisCodes.map((code) => (
-        <li key={code}><Typography variant="body1">{code}</Typography></li>
+      {parsedDiagnosisCodes && parsedDiagnosisCodes.map((diagnosis) => (
+        <li key={diagnosis.code}><Typography variant="body1">{diagnosis.code} {diagnosis.name}</Typography></li>
       ))}
     </ul>
     </Box>

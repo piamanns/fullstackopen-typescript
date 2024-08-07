@@ -2,16 +2,15 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import PatientEntry from "./PatientEntry";
-import { Patient } from "../../types";
+import EntryList from "./EntryList";
+import { Patient, Diagnosis } from "../../types";
 
 interface Props {
   patient: Patient | null;
+  diagnosesData: Diagnosis[]
 }
 
-const PatientView = ({ patient } : Props) => {
+const PatientView = ({ patient, diagnosesData } : Props) => {
   if (!patient) {
     return (
       <div>
@@ -46,13 +45,7 @@ const PatientView = ({ patient } : Props) => {
         <Typography variant="h6" mt={3}>
           Entries:
         </Typography>
-        <Typography variant="body1">
-          <List>
-            {patient.entries && patient.entries.map((entry) => (
-              <ListItem key={entry.id} disableGutters><PatientEntry entry={entry} /></ListItem>
-            ))}
-          </List>
-        </Typography>
+        <EntryList entries={patient.entries} diagnosesData={diagnosesData}/>
       </Box>
     );
   }
