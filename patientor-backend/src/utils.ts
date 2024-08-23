@@ -87,7 +87,7 @@ const parseEmployerName = (entry: unknown): string => {
 
 const parseDate = (date: unknown): string => {
     if (!date || !isString(date) || !isDate(date)) {
-        throw new Error('Incorrect or missing date of birth');
+        throw new Error('Incorrect or missing date');
     }
     return date;
 };
@@ -121,7 +121,7 @@ const parseEntryType = (entryType: unknown): EntryType => {
 };
 
 const parseDescription = (description: unknown): string => {
-    if (!description || !isString(description)) {
+    if (!description || !isString(description) || description.length === 0) {
         throw new Error('Incorrect or missing entry description');
     }
     return description;
@@ -168,7 +168,7 @@ const parseDiagnosisCodes = (entry: unknown): Array<Diagnosis['code']> | undefin
     const parsedDiagnosisCodes: Array<Diagnosis['code']> = [];
     entry.diagnosisCodes.forEach(code => {
         if (!isString(code) || !isDiagnosisCode(code)) {
-          throw new Error('Incorrect diagnosis code');
+          throw new Error(`Incorrect diagnosis code: ${code}`);
         }
         parsedDiagnosisCodes.push(code);
     });
@@ -235,7 +235,7 @@ export const toNewEntry = (entry: unknown): NewEntry => {
         }
         return newEntry;
     }
-    throw new Error('To new Entry threw an error: Incorrect patient entry data.');
+    throw new Error('Incorrect patient entry data.');
 };
 
 export const toNewPatient = (patientInfo: unknown): NewPatient => {
