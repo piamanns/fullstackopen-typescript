@@ -6,13 +6,9 @@ import Typography from "@mui/material/Typography";
 import WorkIcon from '@mui/icons-material/Work';
 import { Diagnosis, Entry } from "../../types";
 import { SvgIconComponent } from "@mui/icons-material";
+import { assertNever } from "../../utils";
 
 
-const assertNever = (value: never): never => {
-  throw new Error(
-    `Unhandled discriminated union member: ${JSON.stringify(value)}`
-  );
-};
 
 interface DateAndIconProps {
   date: string,

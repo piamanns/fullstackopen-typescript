@@ -44,6 +44,7 @@ const isDischarge = (discharge: object): discharge is Discharge => {
         && isString(discharge.date)
         && isDate(discharge.date)
         && isString(discharge.criteria)
+        && discharge.criteria.length > 0
     );
 };
 

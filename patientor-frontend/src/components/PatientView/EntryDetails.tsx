@@ -8,14 +8,9 @@ import {
   OccupationalHealthcareEntry,
   HealthCheckEntry,
   HealthCheckRating,
+  EntryType,
 } from "../../types";
-
-
-const assertNever = (value: never): never => {
-  throw new Error(
-    `Unhandled discriminated union member: ${JSON.stringify(value)}`
-  );
-};
+import { assertNever } from "../../utils";
 
 const DischargeData = ({ discharge }: {discharge: Discharge | undefined}) => {
   if (!discharge) return null;
@@ -71,14 +66,14 @@ const HealthCheckDetails = ({ entry }: { entry: HealthCheckEntry }) => {
 
 const EntryDetails = ({ entry }: { entry: Entry }) => {
   switch (entry.type) {
-    case 'Hospital':
+    case EntryType.Hospital:
       return <HospitalDetails entry={entry}/>;
-    case 'OccupationalHealthcare':
+    case EntryType.OccupationalHealthcare:
       return <OccupationalHealthcareDetails entry={entry}/>;
-    case'HealthCheck':
+    case EntryType.HealthCheck:
       return <HealthCheckDetails entry={entry}/>;
     default:
-      return assertNever(entry);
+      assertNever(entry);
   }
 };
 

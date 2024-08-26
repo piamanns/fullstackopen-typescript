@@ -23,7 +23,7 @@ const PatientView = ({ patient, diagnosesData, setPatient } : Props) => {
 
   const showEntryForm = (): void => {
     setEntryFormVisible(true);
-  }
+  };
 
   const hideEntryForm = (): void => {
     setEntryFormVisible(false);
