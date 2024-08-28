@@ -44,7 +44,7 @@ const App = () => {
   useEffect(() => {
     const getDiagnosesData = async () => {
       const diagnoses = await diagnosisService.getAll();
-      setDiagnoses(diagnoses);
+      setDiagnoses(diagnoses.sort((a, b) => a.code <= b.code ? -1 : 1));
     };
     void getDiagnosesData();
   }, []);

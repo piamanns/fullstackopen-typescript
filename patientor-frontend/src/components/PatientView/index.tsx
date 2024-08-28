@@ -90,7 +90,7 @@ const PatientView = ({ patient, diagnosesData, setPatient } : Props) => {
           </Button>
         }
         {entryFormVisible &&
-          <AddEntryForm onSubmit={submitNewEntry} onCancel={hideEntryForm}/>
+          <AddEntryForm onSubmit={submitNewEntry} onCancel={hideEntryForm} diagnosesData={diagnosesData}/>
         }
         <Typography variant="h6" mt={3}>
           Entries:

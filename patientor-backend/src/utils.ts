@@ -73,18 +73,26 @@ const parseId = (id: unknown): string => {
 
 const parseName = (name: unknown): string => {
     if (!name || !isString(name)) {
-        throw new Error('Incorrect or missing name');
+        throw new Error('Incorrect or missing patient name');
     }
     return name;
 };
 
+const parseSpecialistName = (name: unknown): string => {
+  if (!name || !isString(name)) {
+      throw new Error('Incorrect or missing specialist name');
+  }
+  return name;
+};
+
 const parseEmployerName = (entry: unknown): string => {
   if (!entry || typeof entry !== 'object'
-      || !('employerName' in entry) || !isString(entry.employerName)) {
-      throw new Error('Incorrect or missing employer name')
+      || !('employerName' in entry) || !isString(entry.employerName)
+      || entry.employerName.length === 0) {
+      throw new Error('Incorrect or missing employer name');
   }
   return entry.employerName;
-}
+};
 
 const parseDate = (date: unknown): string => {
     if (!date || !isString(date) || !isDate(date)) {
@@ -130,13 +138,13 @@ const parseDescription = (description: unknown): string => {
 
 const parseDischarge = (entry: unknown): Discharge | undefined => {
     if (!entry || typeof entry !== 'object' || !('discharge' in entry)) {
-        return undefined
+        return undefined;
     }
     if (entry.discharge && isDischarge(entry.discharge)) {
         return entry.discharge;
     }
     throw new Error('Incorrect discharge data');
-}
+};
 
 const parseSickLeave = (entry: unknown): SickLeave | undefined => {
     if (!entry || typeof entry !== 'object' || !('sickLeave' in entry)) {
@@ -188,7 +196,7 @@ const parseEntries = (entries: unknown): Entry[] => {
 
     entries.forEach(entry => {
       const parsedEntry = toNewEntry(entry) as Entry;
-      parsedEntry.id = parseId(entry.id)
+      parsedEntry.id = parseId(entry.id);
       parsedEntries.push(parsedEntry);
     });
 
@@ -205,7 +213,7 @@ export const toNewEntry = (entry: unknown): NewEntry => {
         const baseEntryData = {
             date: parseDate(entry.date),
             type: parseEntryType(entry.type),
-            specialist: parseName(entry.specialist),
+            specialist: parseSpecialistName(entry.specialist),
             description: parseDescription(entry.description),
             diagnosisCodes: parseDiagnosisCodes(entry)
         };

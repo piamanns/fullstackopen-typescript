@@ -4,7 +4,7 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import Typography from "@mui/material/Typography";
 import WorkIcon from '@mui/icons-material/Work';
-import { Diagnosis, Entry } from "../../types";
+import { Diagnosis, Entry, EntryType } from "../../types";
 import { SvgIconComponent } from "@mui/icons-material";
 import { assertNever } from "../../utils";
 
@@ -55,15 +55,15 @@ const SingleEntry = ({ entry, parsedDiagnoses }: Props) => {
   let title = "Icon for entry type";
 
   switch (entry.type) {
-    case "Hospital":
+    case EntryType.Hospital:
       icon = LocalHospitalIcon;
       title = "Hospital entry";
       break;
-    case "OccupationalHealthcare":
+    case EntryType.OccupationalHealthcare:
       icon = WorkIcon;
       title = "Occupational healthcare entry";
       break;
-    case "HealthCheck":
+    case EntryType.HealthCheck:
       icon = MonitorHeartIcon;
       title = "Healthcheck entry";
       break;
