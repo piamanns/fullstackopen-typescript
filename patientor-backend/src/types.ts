@@ -11,7 +11,7 @@ export enum EntryType {
 export interface BaseEntry {
   id: string;
   date: string;
-  type: EntryType
+  type: EntryType;
   specialist: string;
   description: string;
   diagnosisCodes?: Array<Diagnosis['code']>;
@@ -76,4 +76,4 @@ export enum Gender {
 
 export type NoSsnPatient = Omit<Patient, 'ssn' | 'entries'>;
 export type NewPatient = Omit<Patient, 'id'>;
-export type NewEntry = UnionOmit<Entry, 'id'>
+export type NewEntry = UnionOmit<Entry, 'id'>;

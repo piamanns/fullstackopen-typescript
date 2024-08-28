@@ -24,17 +24,16 @@ const addPatient = (patient: NewPatient): Patient => {
 };
 
 const addPatientEntry = (id: string, newEntry: NewEntry): Patient | undefined => {
-    console.log("adding entry ", newEntry, "to patient: ", id);
     const patient = getPatientById(id);
     const entry = {
         id: uuid(),
         ...newEntry
-    }
+    };
     if (patient) {
-      patient.entries.push(entry)
+      patient.entries.push(entry);
     }
     return patient;
-}
+};
 
 const getPatientById = (id: string): Patient | undefined => {
     const patient = patients.find(p => p.id === id);

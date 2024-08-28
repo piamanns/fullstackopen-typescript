@@ -38,7 +38,7 @@ router.post('/:id/entries', (req, res) => {
         if (updatedPatient) {
             res.json(updatedPatient);
         } else {
-          throw new Error ('No such patient')
+          throw new Error ('No such patient');
         }
     } catch (error) {
         let errorMessage = 'Something went wrong.';
@@ -47,6 +47,6 @@ router.post('/:id/entries', (req, res) => {
         }
         res.status(400).send(errorMessage);
     }
-})
+});
 
 export default router;
